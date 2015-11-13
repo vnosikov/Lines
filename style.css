@@ -1,14 +1,11 @@
-table{
-	background-color: #CCCCCC;
-	border-collapse: collapse;
-}
-
-td{
-	width: 50px;
-	height: 50px;
+.container{
+	width:450px;
+	height:450px;
 	border: 1px dashed green;
-	padding:0px;
-	vertical-align:top;
+	background-color: #EDEDED;
+	position:absolute;
+	top:10px;
+	left:10px;
 }
 
 .ball{
@@ -18,8 +15,10 @@ td{
 	/*background-image: url('balls.png');*/
 	padding:0px;
 	opacity:1;
+	color:black;
+	border: 1px solid blue;
 }
 
 .active{
-	opacity:0.5;
+	color:red;
 }
