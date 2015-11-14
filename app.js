@@ -13,17 +13,30 @@ const BALL_OFFSET = (CELL_SIZE - BALL_SIZE)/2;
 var ballActive=null;
 
 function handleNewTurn(){
-	makeNewTurn();
-	for(var i=0; i<9; i++){
-		for(var j=0; j<9; j++){
-			var color = getBallFromTable({x:i, y:j});
-			if(color != 0){
-				var ball = $("<div class='ball ball-" + i + "-"+ j + "'>" + color + "</div>");
-				var pos = indexToPos({x: i, y:j});
-				ball.css('top', pos.y);
-				ball.css('left', pos.x);
-				$('.container').append(ball);
-			}
+	newBalls = makeNewTurn();	
+	for(var i=0; i< newBalls.length;i++){
+		var ind = newBalls[i];
+		var color = getBallFromTable(ind);
+		var ball = $("<div class='ball ball-" + ind.x + "-"+ ind.y + "'>" + color + "</div>");
+		var pos = indexToPos({x: ind.x, y:ind.y});
+		ball.css('top', pos.y);
+		ball.css('left', pos.x);
+		$('.container').append(ball);
+	}
+	
+	checkForRemoval(newBalls);
+}
+
+function checkForRemoval(list){
+	var forRemoval = [];
+	for(i=0; i< list.length;i++){
+		forRemoval = forRemoval.concat(checkFor5InLine(list[i]));
+	}
+	
+	for(var i=0;i<forRemoval.length;i++){
+		var ball = getBallByIndex(forRemoval[i]);
+		if(typeof ball !== 'undefined'){
+			ball.remove();
 		}
 	}
 }
@@ -60,6 +73,10 @@ function onClick(e, cont){
 				
 				ball.removeClass('active');
 				ballActive = null;
+				
+				checkForRemoval([index]);
+				
+				handleNewTurn();
 			}
 		}
 		else{

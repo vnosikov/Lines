@@ -22,12 +22,14 @@ function prepare(){
 	}
 }
 	
-
 function setBallInTable(pair, color){
 	tableField[pair.x][pair.y] = color;
 	if(color!=0){
-		var ind = emptyFields.indexOf(pair);
-		emptyFields.splice(ind,1);
+		for(var i=0;i<emptyFields.length;i++){
+			if(emptyFields[i].x == pair.x && emptyFields[i].y == pair.y){
+				emptyFields.splice(i,1);
+			}
+		}
 	}
 	else{
 		emptyFields.push(pair);
@@ -35,11 +37,12 @@ function setBallInTable(pair, color){
 }
 
 function getBallFromTable(pair){
-	return tableField[pair.x][pair.y];
+	if(pair.x == -1 && pair.y == -1) return -1;
+	else return tableField[pair.x][pair.y];
 }
 
 function generateRandomColor(){
-	return Math.floor(Math.random()*7+1);
+	return Math.floor(Math.random()*3+1);
 }
 
 function createNewBall(color){
@@ -49,6 +52,8 @@ function createNewBall(color){
 		emptyFields.splice(index, 1);
 	
 		tableField[pair.x][pair.y] = color;
+		
+		return pair;
 	}
 	else{
 		throw new Error('Impossible to create new ball when the field is full');
@@ -69,11 +74,14 @@ function moveBall(oldLocation, newLocation){
 var nextColors = [generateRandomColor(), generateRandomColor(), generateRandomColor()];
 
 function makeNewTurn(){
+	traceArrayInLog("EmptyFields: " + emptyFields.length, emptyFields);
+	var newBalls = [];
 	for(var i=0; i<3; i++){
-		createNewBall(nextColors[i]);
+		newBalls.push(createNewBall(nextColors[i]));
 	}
 	
 	nextColors = [generateRandomColor(), generateRandomColor(), generateRandomColor()];
+	return newBalls;
 }
 
 function lookForAPath(source, target){
@@ -134,12 +142,9 @@ function lookForAPath(source, target){
 		var lastPoint = target;
 		while(true){
 			if(step==0){
-				console.log("Path from {" + source.x + " " + source.y + "} to {" + target.x + " " + target.y +"}");
-				var s ="";
-				for(var k=0;k<path.length;k++){
-					s += " {" + path[k].x + " " + path[k].y + "},";
-				}
-				console.log(s);
+				var traceString = "Path from {" + source.x + " " + source.y + "} to {" + target.x + " " + target.y +"}";
+				traceArrayInLog(traceString, path);
+				
 				return path;
 			}
 			
@@ -198,4 +203,84 @@ function getAdjacentPairs(pair){
 	}
 	
 	return result;
+}
+
+function checkFor5InLine(source){
+	if(getBallFromTable(source) == 0){
+		return [];
+	}
+	
+	var x  = source.x, y = source.y;
+	var ballsForRemoval = [], counter;
+	
+	//Horizontal check
+	ballsForRemoval = ballsForRemoval.concat(directionCheck({
+		f1: function(cur){if(cur.x>0) return {x:cur.x-1, y:cur.y}; else return {x:-1, y:-1};},
+		f2: function(cur){if(cur.x<8) return {x:cur.x+1, y:cur.y}; else return {x:-1, y:-1};}}));
+	
+	//Vertical check
+	ballsForRemoval = ballsForRemoval.concat(directionCheck({
+		f1: function(cur){if(cur.y>0) return {x:cur.x, y:cur.y-1}; else return {x:-1, y:-1};},
+		f2: function(cur){if(cur.x<8) return {x:cur.x, y:cur.y+1}; else return {x:-1, y:-1};}}));
+
+	//Left-down to Right-up diagonal check
+	ballsForRemoval = ballsForRemoval.concat(directionCheck({
+		f1: function(cur){if(cur.x>0 && cur.y<8) return {x:cur.x-1, y:cur.y+1}; else return {x:-1, y:-1};},
+		f2: function(cur){if(cur.x<8 && cur.y>0) return {x:cur.x+1, y:cur.y-1}; else return {x:-1, y:-1};}}));
+	
+
+	//Left-up to Right-down diagonal check
+	ballsForRemoval = ballsForRemoval.concat(directionCheck({
+		f1: function(cur){if(cur.x>0 && cur.y>0) return {x:cur.x-1, y:cur.y-1}; else return {x:-1, y:-1};},
+		f2: function(cur){if(cur.x<8 && cur.y<8) return {x:cur.x+1, y:cur.y+1}; else return {x:-1, y:-1};}}));
+		
+	if(ballsForRemoval.length>0){
+		ballsForRemoval.push(source);
+	}	
+	
+	if(ballsForRemoval.length>0){
+		traceArrayInLog("Balls for removal", ballsForRemoval);
+	}
+	
+	removeBalls(ballsForRemoval);
+	return ballsForRemoval;
+		
+	function directionCheck(f){
+		var f1 = f.f1;
+		var f2 = f.f2;
+		counter = 1;
+		var ballsUnderReview = [];
+		counter += tryDirection(f1);
+		counter += tryDirection(f2);
+		if(counter>=5){
+			return ballsUnderReview;
+		}	
+		else return [];
+		
+		function tryDirection(f){
+			var cur  = source;
+			var result = 0;
+			while(getBallFromTable(f(cur)) == getBallFromTable(source)){
+				result++;
+				cur = f(cur);
+				ballsUnderReview.push(cur);
+			}
+			return result;
+		}
+	}
+}
+
+function removeBalls(list){
+	for(var i=0; i<list.length; i++){
+		setBallInTable(list[i], 0);
+	}
+}
+
+function traceArrayInLog(first, a){
+	console.log(first);
+	var s ="";
+	for(var k=0;k<a.length;k++){
+		s += " {" + a[k].x + " " + a[k].y + "},";
+	}
+	console.log(s);
 }
