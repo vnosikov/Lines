@@ -59,24 +59,27 @@ function onClick(e, cont){
 			var path = lookForAPath(ballActive, index);
 			if(path.length!=0){
 				//TODO:Add moving animation
+				
 				var oldPos = getBallIndexClassNameByIndex(ballActive);
 				var newPos = getBallIndexClassNameByIndex(index);
 				var ball = getBallByIndex(ballActive);
 				ball.removeClass(oldPos);
 				ball.addClass(newPos);
 				
-				var pos = indexToPos(index);
-				ball.css('top', pos.y);
-				ball.css('left', pos.x);
+				animateBallMovement(function(){
+					var pos = indexToPos(index);
+					ball.css('top', pos.y);
+					ball.css('left', pos.x);
 				
-				moveBall(ballActive, index);
+					moveBall(ballActive, index);
 				
-				ball.removeClass('active');
-				ballActive = null;
+					ball.removeClass('active');
+					ballActive = null;
 				
-				checkForRemoval([index]);
+					checkForRemoval([index]);
 				
-				handleNewTurn();
+					handleNewTurn();
+				});
 			}
 		}
 		else{
@@ -86,8 +89,28 @@ function onClick(e, cont){
 		}
 	}
 	
-	//handleNewTurn();
+	function animateBallMovement(callback){
+		for(var i=1;i<path.length; i++){
+			var pos = indexToPos(path[i]);
+			
+			if(i==path.length-1){
+				ball.animate({
+					top: pos.y,
+					left: pos.x
+				}, 100, callback);
+			}
+			
+			else{
+				ball.animate({
+					top: pos.y,
+					left: pos.x
+				}, 100);
+			}
+		}
+	}
 }
+
+
 
 function indexToPos(index){
 	var pair={
