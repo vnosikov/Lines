@@ -21,6 +21,7 @@ function handleNewTurn(){
 		var pos = indexToPos({x: ind.x, y:ind.y});
 		ball.css('top', pos.y);
 		ball.css('left', pos.x);
+		ball.fadeIn("250");
 		$('.container').append(ball);
 	}
 	
@@ -35,10 +36,13 @@ function checkForRemoval(list){
 	
 	for(var i=0;i<forRemoval.length;i++){
 		var ball = getBallByIndex(forRemoval[i]);
-		if(typeof ball !== 'undefined'){
-			ball.remove();
+		if(typeof ball !== 'undefitned'){
+			ball.fadeOut("500", function(){
+				ball.remove();
+			});
 		}
 	}
+	return (forRemoval.length>0);
 }
 
 function onClick(e, cont){
@@ -76,9 +80,10 @@ function onClick(e, cont){
 					ball.removeClass('active');
 					ballActive = null;
 				
-					checkForRemoval([index]);
-				
-					handleNewTurn();
+					if(!checkForRemoval([index])){
+						handleNewTurn();
+					}
+
 				});
 			}
 		}
@@ -109,8 +114,6 @@ function onClick(e, cont){
 		}
 	}
 }
-
-
 
 function indexToPos(index){
 	var pair={
