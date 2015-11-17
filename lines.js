@@ -1,7 +1,14 @@
-var tableField=[];
+var tableField = [];
 var emptyFields = [];
+var nextColors = [];
 
-function prepare(){
+
+function prepareModel(){
+	
+	tableField = [];
+	emptyFields = [];
+	nextColors = [];
+	
 	//Prepare Table
 	for(var i=0; i<9;i++){
 		var line=[];
@@ -20,6 +27,8 @@ function prepare(){
 			emptyFields.push(pair);
 		}
 	}
+	
+	nextColors = [generateRandomColor(), generateRandomColor(), generateRandomColor()];
 }
 	
 function setBallInTable(pair, color){
@@ -37,7 +46,7 @@ function setBallInTable(pair, color){
 }
 
 function getBallFromTable(pair){
-	if(pair.x == -1 && pair.y == -1) return -1;
+	if(!pair || (pair.x == -1 && pair.y == -1)) return -1;
 	else return tableField[pair.x][pair.y];
 }
 
@@ -56,7 +65,7 @@ function createNewBall(color){
 		return pair;
 	}
 	else{
-		throw new Error('Impossible to create new ball when the field is full');
+		return [];
 	}
 }
 
@@ -71,13 +80,16 @@ function moveBall(oldLocation, newLocation){
 	setBallInTable(newLocation, ball);
 }
 
-var nextColors = [generateRandomColor(), generateRandomColor(), generateRandomColor()];
-
 function makeNewTurn(){
 	traceArrayInLog("EmptyFields: " + emptyFields.length, emptyFields);
 	var newBalls = [];
 	for(var i=0; i<3; i++){
 		newBalls.push(createNewBall(nextColors[i]));
+	}
+	
+	if(emptyFields.length==0){
+		gameOver();
+		return [];
 	}
 	
 	nextColors = [generateRandomColor(), generateRandomColor(), generateRandomColor()];

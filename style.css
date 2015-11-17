@@ -4,9 +4,13 @@
 	background-image:url('Images/imgs.png');
 	background-repeat:no-repeat;
 	background-position: 0px -40px;
-	position:absolute;
+	position:relative;
 	top:10px;
 	left:10px;
+}
+
+.restartBtn{
+	margin-top:30px;
 }
 
 .ball{
