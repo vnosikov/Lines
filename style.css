@@ -10,15 +10,58 @@
 
 .ball{
 	position: absolute;
-	width:33px;
-	height:33px;
-	/*background-image: url('balls.png');*/
+	width:35px;
+	height:35px;
+	background-image:url('Images/imgs.png');
+	/*background-position: -80px, 0px;*/
+	background-repeat:no-repeat;
 	padding:0px;
 	opacity:1;
-	color:black;
-	border: 1px solid blue;
+}
+
+.ballcolor-1 {
+	background-position: 0px, 0px;
+}
+
+.ballcolor-2 {
+	background-position: -40px, 0px;
+}
+
+.ballcolor-3{
+	background-position: -80px, 0px;
+}
+
+.ballcolor-4{
+	background-position: -120px, 0px;
+}
+
+.ballcolor-5{
+	background-position: -160px, 0px;
+}
+
+.ballcolor-6{
+	background-position: -200px, 0px;
+}
+
+.ballcolor-7{
+	background-position: -240px, 0px;
 }
 
 .active{
-	color:red;
+	animation: jump 1s infinite;
 }
+
+@keyframes jump{
+	50% {
+		margin-top:-10px;
+		animation-timing-function: ease-out;
+	}
+	100%{
+		margin-top:0px;
+		animation-timing-function: ease-in;
+	}
+}
+
+/*.active{
+	opacity:0.5;
+}*/

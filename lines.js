@@ -42,7 +42,7 @@ function getBallFromTable(pair){
 }
 
 function generateRandomColor(){
-	return Math.floor(Math.random()*3+1);
+	return Math.floor(Math.random()*7+1);
 }
 
 function createNewBall(color){

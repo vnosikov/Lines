@@ -17,7 +17,7 @@ function handleNewTurn(){
 	for(var i=0; i< newBalls.length;i++){
 		var ind = newBalls[i];
 		var color = getBallFromTable(ind);
-		var ball = $("<div class='ball ball-" + ind.x + "-"+ ind.y + "'>" + color + "</div>");
+		var ball = $("<div class='ball ball-" + ind.x + "-"+ ind.y + " ballcolor-" + color + "'></div>");
 		var pos = indexToPos({x: ind.x, y:ind.y});
 		ball.css('top', pos.y);
 		ball.css('left', pos.x);
