@@ -1,6 +1,7 @@
 var tableField = [];
 var emptyFields = [];
 var nextColors = [];
+var scores=0;
 
 
 function prepareModel(){
@@ -255,6 +256,7 @@ function checkFor5InLine(source){
 	}
 	
 	removeBalls(ballsForRemoval);
+	scores+=2*ballsForRemoval.length;
 	return ballsForRemoval;
 		
 	function directionCheck(f){

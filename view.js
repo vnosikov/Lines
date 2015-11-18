@@ -23,6 +23,7 @@ function handleNewTurn(){
 	}
 	
 	checkForRemoval(newBalls);
+	showNextBalls();
 }
 
 function checkForRemoval(list){
@@ -80,6 +81,7 @@ function onClick(e, cont){
 					if(!checkForRemoval([index])){
 						handleNewTurn();
 					}
+					$('.scores').val(formatScores());
 					isMoving = false;
 
 				});
@@ -111,6 +113,15 @@ function onClick(e, cont){
 			}
 		}
 	}
+	
+	function formatScores(){
+		var result="";
+		for(var i=0;i<5-scores.toString().length;i++){
+			result+='0';
+		}
+		result+=scores;
+		return result;
+	}
 }
 
 function indexToPos(index){
@@ -135,4 +146,13 @@ function getBallByIndex(index){
 
 function getBallIndexClassNameByIndex(index){
 	return 'ball-' + index.x + '-' + index.y;
+}
+
+function showNextBalls(){
+	$('.nextBall').remove();
+	for (var i=0;i<nextColors.length;i++){
+		var ball = $("<div class='nextBall ballcolor-" + nextColors[i] + "'></div>");
+		ball.css('margin-left', 5+i*55);
+		$('.nextColors').append(ball);
+	}
 }

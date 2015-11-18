@@ -13,7 +13,7 @@
 	margin-top:30px;
 }
 
-.ball{
+.ball, .nextBall{
 	position: absolute;
 	width:35px;
 	height:35px;
@@ -21,6 +21,11 @@
 	background-repeat:no-repeat;
 	padding:0px;
 	opacity:1;
+}
+
+.nextBall{
+	display:inline-block;
+	margin-top:5px;
 }
 
 .ballcolor-1 {
@@ -70,6 +75,35 @@
 	}
 }
 
-/*.active{
-	opacity:0.5;
-}*/
+.services{
+	margin-left:10px;
+	width:450px;
+	height:40px;
+}
+
+.restartBtn{
+	position:relative;
+	top:-10px;
+}
+
+.scores{
+	border:1px solid black;
+	width:60px;
+	background-color: #000000;
+	color: green;
+	font-style:bold;
+	font-size:16px;
+	float:right;
+	margin-top:30px;
+}
+
+.nextColors{
+	display:inline-block;
+	margin-left:60px;
+	border: 1px solid black;
+	width: 150px;
+	height: 40px;
+	margin-top: 20px;
+	
+	background-color:#EDEDED;
+}
