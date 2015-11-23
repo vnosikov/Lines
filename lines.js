@@ -234,7 +234,7 @@ function checkFor5InLine(source){
 	//Vertical check
 	ballsForRemoval = ballsForRemoval.concat(directionCheck({
 		f1: function(cur){if(cur.y>0) return {x:cur.x, y:cur.y-1}; else return {x:-1, y:-1};},
-		f2: function(cur){if(cur.x<8) return {x:cur.x, y:cur.y+1}; else return {x:-1, y:-1};}}));
+		f2: function(cur){if(cur.y<8) return {x:cur.x, y:cur.y+1}; else return {x:-1, y:-1};}}));
 
 	//Left-down to Right-up diagonal check
 	ballsForRemoval = ballsForRemoval.concat(directionCheck({
